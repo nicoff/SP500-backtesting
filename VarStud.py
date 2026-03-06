@@ -61,56 +61,40 @@ plt.show()
 
 # input:
 N   = 10    
-W0      = 100000.0      # Initial investment
-S13     = [1000]*N     # Once a year investment
-Net_S   = [1000]*N      # Monthly investment
+yearly_salary = 100
+month_perc_savings = 0.5
+
+W0      = yearly_salary      # Initial investment
+S13     = [yearly_salary/13]*N     # Once a year investment
+Net_S   = [month_perc_savings*yearly_salary/13]*N      # Monthly investment
 tax_cg = 0              # Capital gain tax
 tax_dg = 30             # dividend gain tax
 
-'''
-realizations = 20000
-realization = [0]*realizations
-block = 10
-years = []
-while len(years) < 2000:
-    start = np.random.randint(0, len(realizations) - block + 1)
-    years.extend(range(start, start + block))
-years = years[:2000]
-
-cg = np.array(historical_SP_capgain)[years]
-dg = np.array(historical_SP_div_yield)[years]
-inflation = np.array(historical_inflation_US)[years]
-for ii in range(0,realizations):
-    #cg = ut.make_time_series(N,ut.stats_tot(historical_SP_capgain))
-    #dg = ut.make_time_series(N,ut.stats_tot(historical_SP_div_yield))
-    #inflation = ut.make_time_series(N,ut.stats_tot(historical_inflation_US))
-
-    '''
 realization = [0]*(len(Year)-N)
+endowment = [0]*(len(Year)-N)
 for ii in range(0,len(Year)-N):
     cg = historical_SP_capgain[ii:(ii+N)]
     dg = historical_SP_div_yield[ii:(ii+N)]
-    inflation = historical_inflation_IT[ii:(ii+N)]
-
+    inflation = historical_inflation_CH[ii:(ii+N)]
 
     # ===============================
     Total_wealth = ut.simulate(N,inflation,cg,dg,W0,Net_S,S13,tax_dg,tax_cg)
     # ===============================
     #print(Total_wealth[-1]/1000000)
-    realization[ii] = 0.04*Total_wealth[-1]/12
+    endowment[ii] = 0.04*Total_wealth[-1]/12
+    realization[ii] = Total_wealth[-1]
+
+
 
 # Plot of the distribution
-#plt.hist(realization, bins=60, edgecolor='black')
-plt.hist(realization, bins=12, edgecolor='black')
-#plt.title("20000 Realizations, Norm dist inflation US")
+plt.hist(endowment, bins=14, edgecolor='black')
 plt.title("1980-2024 10Y Rolling window, inflation CH")
-plt.xlabel("Monthly 0.04 endowment (today's purchasing power)")
+plt.xlabel("Monthly endowment [% yearly income]")
 plt.ylabel("Frequency")
-plt.xlim([0,8000])
 
-median = np.median(realization)
-p10 = np.percentile(realization, 10)
-p90 = np.percentile(realization, 90)
+median = np.median(endowment)
+p10 = np.percentile(endowment, 10)
+p90 = np.percentile(endowment, 90)
 plt.axvline(median, color='red', linestyle='--', label=f'Median = {median:.2f}')
 plt.axvline(p10, color='green', linestyle=':', label=f'10th % = {p10:.2f}')
 plt.axvline(p90, color='blue', linestyle=':', label=f'90th % = {p90:.2f}')
@@ -127,24 +111,23 @@ plt.show()
 
 
 
-
-
+#'''
 # Create figure with 2 vertical subplots
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), height_ratios=[1, 2])
 
 # --- SCATTER PANEL (top) ---
 start_years = Year[0:len(realization)]   # gli anni di inizio finestra
-ax1.scatter(start_years, np.array(realization) * 12 / 0.04)
+ax1.scatter(start_years, np.array(realization) )
 ax1.set_title("Wealth outcome vs starting year of 10Y window")
-ax1.set_ylabel("Total wealth")
+ax1.set_ylabel("Total wealth [% yearly income]")
 ax1.grid(True)
 
 # --- HISTOGRAM PANEL (bottom) ---
 ax2.hist(realization, bins=12, edgecolor='black')
-ax2.set_title("1980–2024 10Y Rolling window, inflation CH")
-ax2.set_xlabel("Monthly 0.04 endowment (today's purchasing power)")
+#ax2.set_title("1980–2024 10Y Rolling window, inflation CH")
+ax2.set_xlabel("Total wealth [% yearly income]")
 ax2.set_ylabel("Frequency")
-ax2.set_xlim([0,8000])
+#ax2.set_xlim([0,8000])
 
 median = np.median(realization)
 p10 = np.percentile(realization, 10)
@@ -157,3 +140,6 @@ ax2.legend()
 
 plt.tight_layout()
 plt.show()
+
+#'''
+

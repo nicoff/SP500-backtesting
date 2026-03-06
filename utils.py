@@ -36,7 +36,7 @@ def real_rate(
 ) -> float:
     """Real annual rate (given directly from spreadsheet)"""
     gross = dg * (1 - tax_div / 100) + cg * (1 - tax_cg / 100) - tax_w
-    return ((1 + gross / 100) / (1 + i / 100) - 1) * 100
+    return ((1 + gross / 100) / (1 + i / 100) - 1) 
 
 
 def value_initial_investment(W0: float, r_real: float) -> float:
@@ -54,6 +54,8 @@ def value_monthly_investments(P: float, r_real: float) -> float:
 
     print('Hello')
     print(res)
+    print(r_real)
+    print(r_m)
 
     return res
 
