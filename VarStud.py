@@ -23,52 +23,18 @@ historical_inflation_CH  = [2.43]*45
 historical_inflation_IT  = [2.43]*45
 '''
 
-'''
-data = {
-    "SP_capgain": historical_SP_capgain,
-    "SP_total_yield": historical_SP_total_yield,
-    "SP_div_yield": historical_SP_div_yield,
-    "infl_CH": historical_inflation_CH,
-    "infl_US": historical_inflation_US,
-    "infl_IT": historical_inflation_IT,
-}
-
-plt.figure(figsize=(10, 12))
-
-for i, (name, series) in enumerate(data.items(), 1):
-    plt.subplot(3, 2, i)
-    plt.hist(series, bins=10)
-    plt.title(name)
-
-plt.tight_layout()
-plt.show()
-
-plt.figure(figsize=(10, 12))
-
-for i, (name, series) in enumerate(data.items(), 1):
-    plt.subplot(3, 2, i)
-    plt.scatter(Year, series)
-    plt.title(name)
-
-plt.tight_layout()
-plt.show()
-'''
-
-
-
-
-
 
 # input:
 N   = 10    
-yearly_salary = 100
-month_perc_savings = 0.5
+yearly_salary = 100         # yearly salary 
+month_perc_savings = 0.3    # percentage of monthly salary invested
+nr_y_s = 1                  # amount of yearly salaries for initial investment
 
-W0      = yearly_salary      # Initial investment
-S13     = [yearly_salary/13]*N     # Once a year investment
-Net_S   = [month_perc_savings*yearly_salary/13]*N      # Monthly investment
-tax_cg = 0              # Capital gain tax
-tax_dg = 30             # dividend gain tax
+W0      = yearly_salary * nr_y_s                    # Initial investment
+S13     = [yearly_salary/13]*N                      # Once a year investment
+Net_S   = [month_perc_savings*yearly_salary/13]*N   # Monthly investment
+tax_cg = 0                                          # Capital gain tax
+tax_dg = 30                                         # dividend gain tax
 
 realization = [0]*(len(Year)-N)
 endowment = [0]*(len(Year)-N)
@@ -80,13 +46,15 @@ for ii in range(0,len(Year)-N):
     # ===============================
     Total_wealth = ut.simulate(N,inflation,cg,dg,W0,Net_S,S13,tax_dg,tax_cg)
     # ===============================
-    #print(Total_wealth[-1]/1000000)
     endowment[ii] = 0.04*Total_wealth[-1]/12
     realization[ii] = Total_wealth[-1]
 
 
 
-# Plot of the distribution
+
+###################################################
+#''' Distribution monthly endowment
+###################################################
 plt.hist(endowment, bins=14, edgecolor='black')
 plt.title("1980-2024 10Y Rolling window, inflation CH")
 plt.xlabel("Monthly endowment [% yearly income]")
@@ -104,13 +72,9 @@ plt.show()
 
 
 
-
-
-
-
-
-
-
+###################################################
+#''' starting year dependence
+###################################################
 #'''
 # Create figure with 2 vertical subplots
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), height_ratios=[1, 2])
@@ -143,3 +107,36 @@ plt.show()
 
 #'''
 
+
+###################################################
+#''' historical data
+###################################################
+data = {
+    "SP_capgain": historical_SP_capgain,
+    "SP_total_yield": historical_SP_total_yield,
+    "SP_div_yield": historical_SP_div_yield,
+    "infl_CH": historical_inflation_CH,
+    "infl_US": historical_inflation_US,
+    "infl_IT": historical_inflation_IT,
+}
+
+plt.figure(figsize=(10, 12))
+
+for i, (name, series) in enumerate(data.items(), 1):
+    plt.subplot(3, 2, i)
+    plt.hist(series, bins=10)
+    plt.title(name)
+
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(10, 12))
+
+for i, (name, series) in enumerate(data.items(), 1):
+    plt.subplot(3, 2, i)
+    plt.scatter(Year, series)
+    plt.title(name)
+
+plt.tight_layout()
+plt.show()
+#'''

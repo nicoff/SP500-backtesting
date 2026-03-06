@@ -51,12 +51,6 @@ def value_monthly_investments(P: float, r_real: float) -> float:
         res =  P * (((1 + r_m ) ** 12) - 1)/r_m
     else:
         res = 12*P
-
-    print('Hello')
-    print(res)
-    print(r_real)
-    print(r_m)
-
     return res
 
 
@@ -124,9 +118,9 @@ def stats_tot(data):
 # ===============================
 def simulate(
     N: int,                 # Number of years
-    inflation: List[float], # NOMINAML Inflation over the years
-    cg: List[float],        # NOMINAML Capital Gains o.t.y
-    dg: List[float],        # NOMINAML Dividend Gains o.t.y
+    inflation: List[float], # NOMINAL Inflation over the years
+    cg: List[float],        # NOMINAL Capital Gains o.t.y
+    dg: List[float],        # NOMINAL Dividend Gains o.t.y
     W0: float,              # Initial Wealth
     S: List[float],         # Yearly Salary o.t.y
     S13: List[float],       # 13th Salary o.t.y
